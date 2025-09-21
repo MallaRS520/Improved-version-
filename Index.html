@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Up-Down Guessing Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #74ebd5 0%, #9face6 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .game-container {
+      background: white;
+      padding: 20px 30px;
+      border-radius: 15px;
+      box-shadow: 0px 4px 12px rgba(0,0,0,0.2);
+      text-align: center;
+      width: 90%;
+      max-width: 400px;
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+    .instructions {
+      font-size: 14px;
+      margin-bottom: 20px;
+      color: #555;
+    }
+    input[type="number"] {
+      padding: 10px;
+      width: 60%;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    button {
+      padding: 10px 15px;
+      margin: 10px 5px;
+      border: none;
+      border-radius: 8px;
+      background: #4a90e2;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #357ab7;
+    }
+    .message {
+      font-weight: bold;
+      margin-top: 15px;
+      font-size: 18px;
+    }
+    .scoreboard {
+      margin-top: 15px;
+      font-size: 14px;
+      color: #444;
+    }
+    select {
+      padding: 8px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      border: 1px solid #aaa;
+    }
+    .docs-link {
+      margin-top: 20px;
+    }
+    .docs-link a {
+      display: inline-block;
+      padding: 10px 15px;
+      border-radius: 8px;
+      background: #28a745;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+    .docs-link a:hover {
+      background: #218838;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <h1>🔢 Up-Down Game</h1>
+    <p class="instructions">Guess the number! The game will tell you if your guess is too high or too low.</p>
+    
+    <label for="difficulty">Choose difficulty:</label>
+    <select id="difficulty">
+      <option value="10">Easy (1-10)</option>
+      <option value="50">Medium (1-50)</option>
+      <option value="100">Hard (1-100)</option>
+    </select>
+    
+    <br>
+    <input type="number" id="guess" placeholder="Enter your guess">
+    <button onclick="checkGuess()">Submit</button>
+    <button onclick="restartGame()">Restart</button>
+    
+    <p class="message" id="message"></p>
+    <div class="scoreboard">
+      <p id="attempts">Attempts: 0</p>
+      <p id="bestScore">Best Score: --</p>
+    </div>
+
+    <!-- Google Docs Link Section -->
+    <div class="docs-link">
+      <a href="https://1drv.ms/w/c/3D9648DC558A7DF8/EVH8v83SAY1GhIAI5KkIwYABs-4-U3JFV_3LXi0HQWxu3w?e=ccrtPD" target="_blank">📄 View My Google Docs Prompt</a>
+    </div>
+  </div>
+
+  <script>
+    let randomNumber;
+    let attempts;
+    let bestScore = null;
+    let maxRange = 10;
+
+    function startGame() {
+      maxRange = parseInt(document.getElementById("difficulty").value);
+      randomNumber = Math.floor(Math.random() * maxRange) + 1;
+      attempts = 0;
+      document.getElementById("message").textContent = "";
+      document.getElementById("attempts").textContent = "Attempts: 0";
+      document.getElementById("guess").value = "";
+    }
+
+    function checkGuess() {
+      const userGuess = parseInt(document.getElementById("guess").value);
+      if (isNaN(userGuess)) {
+        document.getElementById("message").textContent = "⚠️ Please enter a valid number!";
+        return;
+      }
+      attempts++;
+      document.getElementById("attempts").textContent = "Attempts: " + attempts;
+
+      if (userGuess === randomNumber) {
+        document.getElementById("message").textContent = "🎉 Correct! The number was " + randomNumber;
+        if (bestScore === null || attempts < bestScore) {
+          bestScore = attempts;
+          document.getElementById("bestScore").textContent = "Best Score: " + bestScore;
+        }
+      } else if (userGuess < randomNumber) {
+        document.getElementById("message").textContent = "⬆️ Too low! Try again.";
+      } else {
+        document.getElementById("message").textContent = "⬇️ Too high! Try again.";
+      }
+    }
+
+    function restartGame() {
+      startGame();
+    }
+
+    document.getElementById("difficulty").addEventListener("change", startGame);
+    window.onload = startGame;
+  </script>
+</body>
+</html>
